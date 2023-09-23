@@ -1,0 +1,15 @@
+import ffmpeg
+
+def merge_images_and_audio(image_path, audio_path, output_path):
+    # Define the input streams for the images and audio
+    input_images = ffmpeg.input(image_path, pattern_type='glob', framerate=30)
+    input_audio = ffmpeg.input(audio_path)
+
+    # Use the concat filter to combine the images into a single video stream
+    video = input_images.filter('concat', n=len(input_images), v=1)
+
+    # Combine the video and audio streams into a single output stream
+    output = ffmpeg.output(video, input_audio, output_path)
+
+    # Run the ffmpeg command to generate the output video file
+    ffmpeg.run(output)
